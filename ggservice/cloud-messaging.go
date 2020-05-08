@@ -3,6 +3,7 @@ package ggservice
 import (
 	"context"
 	"log"
+	"os"
 	"path/filepath"
 	"runtime"
 
@@ -44,11 +45,17 @@ func SendMessageToDevices(message *messaging.MulticastMessage) {
 
 func init() {
 	log.Println("[Firebase]", "Init cloud messaging service")
+	var err error
+
 	_, b, _, _ := runtime.Caller(0)
 	basepath := filepath.Dir(b)
+	file := filepath.Join(filepath.Dir(basepath), "firebase-admin-key.json")
+	info, err := os.Stat(file)
+	if os.IsNotExist(err) || info.IsDir() {
+		log.Println("[Firebase]", "Cannot found the key:", file)
+	}
 
-	var err error
-	opt := option.WithCredentialsFile(filepath.Join(filepath.Dir(basepath), "firebase-admin-key.json"))
+	opt := option.WithCredentialsFile(file)
 	app, err = firebase.NewApp(context.Background(), nil, opt)
 	if err != nil {
 		log.Println("[Firebase]", err.Error())
