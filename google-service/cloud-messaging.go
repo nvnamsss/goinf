@@ -3,6 +3,8 @@ package ggservice
 import (
 	"context"
 	"log"
+	"path/filepath"
+	"runtime"
 
 	firebase "firebase.google.com/go"
 	"firebase.google.com/go/messaging"
@@ -42,8 +44,11 @@ func SendMessageToDevices(message *messaging.MulticastMessage) {
 
 func init() {
 	log.Println("[Firebase]", "Init cloud messaging service")
+	_, b, _, _ := runtime.Caller(0)
+	basepath := filepath.Dir(b)
+
 	var err error
-	opt := option.WithCredentialsFile("hardy-moon-270302-firebase-adminsdk-21l8e-3ae6b979aa.json")
+	opt := option.WithCredentialsFile(filepath.Join(filepath.Dir(basepath), "firebase-admin-key.json"))
 	app, err = firebase.NewApp(context.Background(), nil, opt)
 	if err != nil {
 		log.Println("[Firebase]", err.Error())
