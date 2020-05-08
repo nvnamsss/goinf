@@ -50,8 +50,9 @@ func init() {
 	_, b, _, _ := runtime.Caller(0)
 	basepath := filepath.Dir(b)
 	file := filepath.Join(filepath.Dir(basepath), "firebase-admin-key.json")
-	info, err := os.Stat(file)
-	if os.IsNotExist(err) || info.IsDir() {
+	_, ferr := os.Stat(file)
+
+	if os.IsNotExist(ferr) {
 		log.Println("[Firebase]", "Cannot found the key:", file)
 	}
 
