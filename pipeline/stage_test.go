@@ -17,7 +17,13 @@ func TestNextStage(t *testing.T) {
 		}{"meomeocute", 1}, nil
 	}
 	stage := NewStage(fn)
+	stage2 := NewStage(func() (str struct{ Meo []string }, e error) {
+		str.Meo = []string{"Abc", "123", "meomeocute"}
 
+		return
+	})
+
+	stage.NextStage(stage2)
 	var p *Pipeline = NewPipeline()
 	p.First = stage
 	err := p.Run()
@@ -28,7 +34,7 @@ func TestNextStage(t *testing.T) {
 
 	s := p.GetString("Field")[0]
 	f := p.GetInt("Meo")[0]
-
+	s2 := p.GetString("Meo")[0]
 	if s != "meomeocute" {
 		t.Errorf("pipeline returned wrong string value: got %v want %v",
 			s, "meomeocute")
@@ -41,5 +47,11 @@ func TestNextStage(t *testing.T) {
 			f, 1)
 	} else {
 		t.Logf("pipeline returned float value passed")
+	}
+
+	if s2 != "meomeocute" {
+		t.Errorf("pipeline returned wrong string value: got %v want %v", s2, "meomeocute")
+	} else {
+		t.Logf("pipeline returned string value in array passed")
 	}
 }

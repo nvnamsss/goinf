@@ -33,7 +33,14 @@ func (p *Pipeline) Run() error {
 			name := result[0].Type().Field(loop).Name
 			value := indirect.Field(loop)
 
+			if value.Kind() == reflect.Slice || value.Kind() == reflect.Array {
+				for _, item := value.Interface() {
+			
+				}
+			}
+
 			p.values[name] = append(p.values[name], value)
+
 		}
 
 		current = current.stages
@@ -43,21 +50,7 @@ func (p *Pipeline) Run() error {
 	return nil
 }
 
-func (p Pipeline) convert(embryo interface{}) {
-	convert := func(in []reflect.Value) []reflect.Value {
-		if !p.IsPassed {
-			return nil
-		}
-
-		return p.values[in[0].String()]
-	}
-
-	fn := reflect.ValueOf(embryo).Elem()
-	v := reflect.MakeFunc(fn.Type(), convert)
-
-	fn.Set(v)
-}
-
+//GetFloat return float values of a specified field which are received from every stages.
 func (p Pipeline) GetFloat(field string) []float64 {
 	// var embryo func(string) []float64
 	// p.convert(embryo)
@@ -76,6 +69,7 @@ func (p Pipeline) GetFloat(field string) []float64 {
 	return result
 }
 
+//GetString return string values of a specified field which are received from every stages.
 func (p Pipeline) GetString(field string) []string {
 	if !p.IsPassed {
 		return nil
@@ -83,12 +77,15 @@ func (p Pipeline) GetString(field string) []string {
 
 	var result []string = []string{}
 	for _, value := range p.values[field] {
-		result = append(result, value.String())
+		if value.Kind() == reflect.String {
+			result = append(result, value.String())
+		}
 	}
 
 	return result
 }
 
+//GetInt return int values of a specified field which are received from every stages.
 func (p Pipeline) GetInt(field string) []int64 {
 	if !p.IsPassed {
 		return nil
@@ -96,12 +93,16 @@ func (p Pipeline) GetInt(field string) []int64 {
 
 	var result []int64 = []int64{}
 	for _, value := range p.values[field] {
-		result = append(result, value.Int())
+
+		if value.Kind() == reflect.Int {
+			result = append(result, value.Int())
+		}
 	}
 
 	return result
 }
 
+//GetBool return bool values of a specified field which are received from every stages.
 func (p Pipeline) GetBool(field string) []bool {
 	if !p.IsPassed {
 		return nil
@@ -109,10 +110,21 @@ func (p Pipeline) GetBool(field string) []bool {
 
 	var result []bool = []bool{}
 	for _, value := range p.values[field] {
-		result = append(result, value.Bool())
+		if value.Kind() == reflect.Bool {
+			result = append(result, value.Bool())
+		}
 	}
 
 	return result
+}
+
+//GetValue return values of a specified field which are received from every stages.
+func (p Pipeline) GetValue(field string) []reflect.Value {
+	if !p.IsPassed {
+		return nil
+	}
+
+	return p.values[field]
 }
 
 //Constructor for creating new Pipeline
