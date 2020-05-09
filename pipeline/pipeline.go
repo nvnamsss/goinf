@@ -34,12 +34,13 @@ func (p *Pipeline) Run() error {
 			value := indirect.Field(loop)
 
 			if value.Kind() == reflect.Slice || value.Kind() == reflect.Array {
-				for _, item := value.Interface() {
-			
+				len := value.Len()
+				for loop := 0; loop < len; loop++ {
+					p.values[name] = append(p.values[name], value.Index(loop))
 				}
+			} else {
+				p.values[name] = append(p.values[name], value)
 			}
-
-			p.values[name] = append(p.values[name], value)
 
 		}
 
@@ -125,6 +126,24 @@ func (p Pipeline) GetValue(field string) []reflect.Value {
 	}
 
 	return p.values[field]
+}
+
+func (p Pipeline) GetValueGeneric(field string, T reflect.Type) []interface{} {
+	if !p.IsPassed {
+		return nil
+	}
+
+	var result []interface{} = []interface{}{}
+
+	for _, value := range p.values[field] {
+		t := reflect.TypeOf(value)
+
+		if t == T {
+			result = append(result, value.Interface())
+		}
+	}
+
+	return result
 }
 
 //Constructor for creating new Pipeline

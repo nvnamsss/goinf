@@ -34,7 +34,7 @@ func TestNextStage(t *testing.T) {
 
 	s := p.GetString("Field")[0]
 	f := p.GetInt("Meo")[0]
-	s2 := p.GetString("Meo")[0]
+	s2 := p.GetString("Meo")[2]
 	if s != "meomeocute" {
 		t.Errorf("pipeline returned wrong string value: got %v want %v",
 			s, "meomeocute")
