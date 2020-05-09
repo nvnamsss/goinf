@@ -4,8 +4,6 @@ import (
 	"context"
 	"log"
 	"os"
-	"path/filepath"
-	"runtime"
 
 	firebase "firebase.google.com/go"
 	"firebase.google.com/go/messaging"
@@ -42,26 +40,6 @@ func SendMessageToDevices(message *messaging.MulticastMessage) {
 
 	if err != nil {
 		log.Println("[Firebase]", err)
-	}
-}
-
-func init() {
-	log.Println("[Firebase]", "Init cloud messaging service")
-	var err error
-
-	_, b, _, _ := runtime.Caller(0)
-	basepath := filepath.Dir(b)
-	file := filepath.Join(filepath.Dir(basepath), "firebase-admin-key.json")
-	_, ferr := os.Stat(file)
-
-	if os.IsNotExist(ferr) {
-		log.Println("[Firebase]", "Cannot found the key:", file)
-	}
-
-	opt := option.WithCredentialsFile(file)
-	app, err = firebase.NewApp(context.Background(), nil, opt)
-	if err != nil {
-		log.Println("[Firebase]", err.Error())
 	}
 }
 
