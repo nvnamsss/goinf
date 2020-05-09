@@ -12,6 +12,8 @@ import (
 	"google.golang.org/api/option"
 )
 
+//FirebaseKeyPath determine the location where the firebase admin key is stored
+var FirebaseKeyPath string
 var app *firebase.App
 
 //SendToToken send a message to a specified device
@@ -61,4 +63,28 @@ func init() {
 	if err != nil {
 		log.Println("[Firebase]", err.Error())
 	}
+}
+
+//Setup prepare the application for working with firebase service.
+func Setup() (e error) {
+
+	_, e = os.Stat(FirebaseKeyPath)
+	if os.IsNotExist(e) {
+		log.Println("[Firebase]", "Cannot found the key:", FirebaseKeyPath)
+		return e
+	}
+
+	opt := option.WithCredentialsFile(FirebaseKeyPath)
+	app, e = firebase.NewApp(context.Background(), nil, opt)
+	if e != nil {
+		log.Println("[Firebase]", e.Error())
+	}
+
+	return
+}
+
+//SetupWithPath set the FilebaseKeyPath by specified path then run Setup
+func SetupWithPath(path string) (e error) {
+	FirebaseKeyPath = path
+	return Setup()
 }
