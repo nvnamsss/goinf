@@ -53,11 +53,6 @@ func (p *Pipeline) Run() error {
 
 //GetFloat return float values of a specified field which are received from every stages.
 func (p Pipeline) GetFloat(field string) []float64 {
-	// var embryo func(string) []float64
-	// p.convert(embryo)
-
-	// result := embryo(field)
-
 	if !p.IsPassed {
 		return nil
 	}
@@ -113,33 +108,6 @@ func (p Pipeline) GetBool(field string) []bool {
 	for _, value := range p.values[field] {
 		if value.Kind() == reflect.Bool {
 			result = append(result, value.Bool())
-		}
-	}
-
-	return result
-}
-
-//GetValue return values of a specified field which are received from every stages.
-func (p Pipeline) GetValue(field string) []reflect.Value {
-	if !p.IsPassed {
-		return nil
-	}
-
-	return p.values[field]
-}
-
-func (p Pipeline) GetValueGeneric(field string, T reflect.Type) []interface{} {
-	if !p.IsPassed {
-		return nil
-	}
-
-	var result []interface{} = []interface{}{}
-
-	for _, value := range p.values[field] {
-		t := reflect.TypeOf(value)
-
-		if t == T {
-			result = append(result, value.Interface())
 		}
 	}
 
