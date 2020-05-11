@@ -8,12 +8,12 @@ func TestNextStage(t *testing.T) {
 
 	fn := func() (struct {
 		Field string
-		Meo   int
+		Meo   int64
 	}, error) {
 
 		return struct {
 			Field string
-			Meo   int
+			Meo   int64
 		}{"meomeocute", 1}, nil
 	}
 	stage := NewStage(fn)

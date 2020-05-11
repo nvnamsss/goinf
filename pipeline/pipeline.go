@@ -59,7 +59,10 @@ func (p Pipeline) GetFloat(field string) []float64 {
 
 	var result []float64 = []float64{}
 	for _, value := range p.values[field] {
-		result = append(result, value.Float())
+		kind := value.Kind()
+		if kind == reflect.Float32 || kind == reflect.Float64 {
+			result = append(result, value.Float())
+		}
 	}
 
 	return result
@@ -89,8 +92,12 @@ func (p Pipeline) GetInt(field string) []int64 {
 
 	var result []int64 = []int64{}
 	for _, value := range p.values[field] {
-
-		if value.Kind() == reflect.Int {
+		kind := value.Kind()
+		if kind == reflect.Int ||
+			kind == reflect.Int8 ||
+			kind == reflect.Int16 ||
+			kind == reflect.Int32 ||
+			kind == reflect.Int64 {
 			result = append(result, value.Int())
 		}
 	}
