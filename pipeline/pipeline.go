@@ -68,6 +68,19 @@ func (p Pipeline) GetFloat(field string) []float64 {
 	return result
 }
 
+//GetFloatFirstOrDefault return the first item from GetFloat but automatically add a default value (0) if the field is not existed in the pipeline
+//
+//GetFloatFirstOrDefault should use in case you want to use the default value if the field is not existed without checking for empty result.
+func (p Pipeline) GetFloatFirstOrDefault(field string) (result float64) {
+	rs := p.GetFloat(field)
+
+	if len(rs) == 0 {
+		return 0
+	}
+
+	return rs[0]
+}
+
 //GetString return string values of a specified field which are received from every stages.
 func (p Pipeline) GetString(field string) []string {
 	if !p.IsPassed {
@@ -82,6 +95,19 @@ func (p Pipeline) GetString(field string) []string {
 	}
 
 	return result
+}
+
+//GetStringFirstOrDefault return the first item from GetString but automatically return a default value ("") if the field is not existed in the pipeline
+//
+//GetStringFirstOrDefault should use in case you want to use the default value if the field is not existed without checking for empty result.
+func (p Pipeline) GetStringFirstOrDefault(field string) (result string) {
+	rs := p.GetString(field)
+
+	if len(rs) == 0 {
+		return ""
+	}
+
+	return rs[0]
 }
 
 //GetInt return int values of a specified field which are received from every stages.
@@ -102,6 +128,19 @@ func (p Pipeline) GetInt(field string) []int64 {
 	return result
 }
 
+//GetIntFirstOrDefault return the first item from GetInt but automatically return a default value (zero) if the field is not existed in the pipeline
+//
+//GetIntFirstOrDefault should use in case you want to use the default value if the field is not existed without checking for empty result.
+func (p Pipeline) GetIntFirstOrDefault(field string) (result int64) {
+	rs := p.GetInt(field)
+
+	if len(rs) == 0 {
+		return 0
+	}
+
+	return rs[0]
+}
+
 //GetBool return bool values of a specified field which are received from every stages.
 func (p Pipeline) GetBool(field string) []bool {
 	if !p.IsPassed {
@@ -116,6 +155,19 @@ func (p Pipeline) GetBool(field string) []bool {
 	}
 
 	return result
+}
+
+//GetBoolFirstOrDefault return the first item from GetBool but automatically return a default value (false) if the field is not existed in the pipeline
+//
+//GetBoolFirstOrDefault should use in case you want to use the default value if the field is not existed without checking for empty result.
+func (p Pipeline) GetBoolFirstOrDefault(field string) (result bool) {
+	rs := p.GetBool(field)
+
+	if len(rs) == 0 {
+		return false
+	}
+
+	return rs[0]
 }
 
 //Constructor for creating new Pipeline

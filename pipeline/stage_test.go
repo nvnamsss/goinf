@@ -48,6 +48,7 @@ func TestNextStage(t *testing.T) {
 	f := p.GetInt("Meo")[0]
 	s2 := p.GetString("Meo")[2]
 	m := p.GetMapString("Data")
+	d := p.GetIntFirstOrDefault("anhon")
 
 	if s != "meomeocute" {
 		t.Errorf("pipeline returned wrong string value: got %v want %v",
@@ -73,5 +74,11 @@ func TestNextStage(t *testing.T) {
 		t.Errorf("pipeline returned wrong string value: got %v want %v", m["may"], "meomeocute")
 	} else {
 		t.Logf("pipeline returned string value in map passed")
+	}
+
+	if d != 0 {
+		t.Errorf("pipeline returned wrong int default value: got %v want %v", d, 0)
+	} else {
+		t.Logf("pipeline returned default in value passed")
 	}
 }
