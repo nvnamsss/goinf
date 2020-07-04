@@ -22,10 +22,12 @@ type Bounds struct {
 	Item   Item
 }
 
-func (bound Bounds) Location() {
-	var location r2.Point
-	location.X = bound.X
-	location.Y = bound.Y
+func (bound Bounds) GetId() string {
+	return bound.Item.GetId()
+}
+
+func (bound Bounds) Location() r2.Point {
+	return bound.Item.Location()
 }
 
 //IsPoint - Checks if a bounds object is a point or not (has no width or height)
@@ -72,6 +74,18 @@ func (b *Bounds) Intersects(a Bounds) bool {
 
 }
 
+func (qt *Quadtree) RemoveItem(item Item) {
+	at := -1
+	for index, b := range qt.Objects {
+		if b.Item == item {
+			at = index
+		}
+	}
+	if at != -1 {
+		qt.Objects = append(qt.Objects[:at], qt.Objects[at+1:]...)
+	}
+}
+
 // TotalNodes - Retrieve the total number of sub-Quadtrees in a Quadtree
 func (qt *Quadtree) TotalNodes() int {
 
@@ -85,7 +99,6 @@ func (qt *Quadtree) TotalNodes() int {
 	}
 
 	return total
-
 }
 
 // split - split the node into 4 subnodes

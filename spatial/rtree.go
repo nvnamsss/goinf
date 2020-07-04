@@ -22,6 +22,7 @@ type RTree struct {
 var MaxRange float64 = 4.0
 
 type Item interface {
+	GetId() string
 	Location() r2.Point
 }
 
