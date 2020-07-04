@@ -77,7 +77,7 @@ func (b *Bounds) Intersects(a Bounds) bool {
 func (qt *Quadtree) RemoveItem(item Item) {
 	at := -1
 	for index, b := range qt.Objects {
-		if b.Item == item {
+		if b.Item.GetId() == item.GetId() {
 			at = index
 		}
 	}
