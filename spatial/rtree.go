@@ -76,7 +76,7 @@ func (rt *RTree) RemoveItem(item Item) {
 			}
 		}
 		if at != -1 {
-			rt.Items = append(rt.Items[:at], rt.Items[at+1:]...)
+			tree.Items = append(tree.Items[:at], tree.Items[at+1:]...)
 		}
 	}
 }
@@ -108,13 +108,13 @@ func (rt *RTree) UpdateRect() {
 
 //InRange find trees which are not further than the max range with the location
 //Items in the tree are potential to be the item in the range
-func (rt *RTree) InRange(location r2.Point, max_range float64) []RTree {
-	var result []RTree = []RTree{}
+func (rt *RTree) InRange(location r2.Point, max_range float64) []*RTree {
+	var result []*RTree = []*RTree{}
 	for _, tree := range rt.Descendant {
 		d := tree.Distance(location)
 
 		if d <= max_range {
-			result = append(result, *tree)
+			result = append(result, tree)
 		}
 	}
 
