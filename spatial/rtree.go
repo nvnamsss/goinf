@@ -66,6 +66,21 @@ func (rt *RTree) AddItem(item Item) error {
 	return nil
 }
 
+func (rt *RTree) RemoveItem(item Item) {
+	trees := rt.InRange(item.Location(), 1)
+	for _, tree := range trees {
+		at := -1
+		for index, i := range tree.Items {
+			if i.GetId() == item.GetId() {
+				at = index
+			}
+		}
+		if at != -1 {
+			rt.Items = append(rt.Items[:at], rt.Items[at+1:]...)
+		}
+	}
+}
+
 //UpdateRect modify the Rect the size and affect to the Rect of Ancestor
 //UpdateRect should be used for automatically updating size of Rect
 func (rt *RTree) UpdateRect() {
